@@ -1,0 +1,171 @@
+{
+  "name": "bugfree-debugger",
+  "displayName": "Bugfree Multi-Agent Debugger",
+  "description": "AI-powered debugging with multi-agent system",
+  "version": "0.1.0",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": [
+    "Debuggers",
+    "Other"
+  ],
+  "activationEvents": [
+    "onCommand:bugfree.startSystem",
+    "onCommand:bugfree.stopSystem",
+    "onCommand:bugfree.analyzeError",
+    "onView:bugfreeErrorPanel"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "bugfree.startSystem",
+        "title": "Bugfree: Start Debugging System",
+        "category": "Bugfree"
+      },
+      {
+        "command": "bugfree.stopSystem",
+        "title": "Bugfree: Stop Debugging System",
+        "category": "Bugfree"
+      },
+      {
+        "command": "bugfree.analyzeError",
+        "title": "Bugfree: Analyze Current Error",
+        "category": "Bugfree"
+      },
+      {
+        "command": "bugfree.applyFix",
+        "title": "Bugfree: Apply Fix",
+        "category": "Bugfree"
+      },
+      {
+        "command": "bugfree.explainFix",
+        "title": "Bugfree: Explain Fix",
+        "category": "Bugfree"
+      },
+      {
+        "command": "bugfree.ignoreError",
+        "title": "Bugfree: Ignore Error",
+        "category": "Bugfree"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "bugfree-sidebar",
+          "title": "Bugfree Debugger",
+          "icon": "resources/bugfree-icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "bugfree-sidebar": [
+        {
+          "id": "bugfreeErrorPanel",
+          "name": "Current Errors",
+          "when": "bugfree.systemRunning"
+        },
+        {
+          "id": "bugfreeSuggestionsPanel",
+          "name": "Fix Suggestions",
+          "when": "bugfree.hasSuggestions"
+        },
+        {
+          "id": "bugfreeHistoryPanel",
+          "name": "Error History",
+          "when": "bugfree.hasHistory"
+        }
+      ]
+    },
+    "viewsWelcome": [
+      {
+        "view": "bugfreeErrorPanel",
+        "contents": "No errors detected.\n[Start Bugfree System](command:bugfree.startSystem)"
+      },
+      {
+        "view": "bugfreeSuggestionsPanel",
+        "contents": "No suggestions available.\n[Analyze Error](command:bugfree.analyzeError)"
+      },
+      {
+        "view": "bugfreeHistoryPanel",
+        "contents": "No error history.\n[Start Debugging](command:bugfree.startSystem)"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "bugfree.startSystem",
+          "when": "view == bugfreeErrorPanel && !bugfree.systemRunning",
+          "group": "navigation"
+        },
+        {
+          "command": "bugfree.stopSystem",
+          "when": "view == bugfreeErrorPanel && bugfree.systemRunning",
+          "group": "navigation"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "bugfree.applyFix",
+          "when": "view == bugfreeSuggestionsPanel",
+          "group": "inline"
+        },
+        {
+          "command": "bugfree.explainFix",
+          "when": "view == bugfreeSuggestionsPanel",
+          "group": "inline"
+        },
+        {
+          "command": "bugfree.ignoreError",
+          "when": "view == bugfreeErrorPanel",
+          "group": "inline"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Bugfree Debugger",
+      "properties": {
+        "bugfree.serverHost": {
+          "type": "string",
+          "default": "localhost",
+          "description": "Host for Bugfree server"
+        },
+        "bugfree.serverPort": {
+          "type": "number",
+          "default": 8003,
+          "description": "Port for Bugfree server"
+        },
+        "bugfree.autoStart": {
+          "type": "boolean",
+          "default": false,
+          "description": "Automatically start Bugfree system when opening workspace"
+        },
+        "bugfree.maxSuggestions": {
+          "type": "number",
+          "default": 3,
+          "description": "Maximum number of suggestions to show"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.80.0",
+    "@types/node": "16.x",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.0.0",
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "ws": "^8.0.0"
+  }
+} 

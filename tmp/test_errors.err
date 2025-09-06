@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/Users/michaelmao/Desktop/agent/test_errors.py", line 7, in <module>
+    print(undefined_variable)
+          ^^^^^^^^^^^^^^^^^^
+NameError: name 'undefined_variable' is not defined
